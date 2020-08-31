@@ -1,5 +1,4 @@
 from django.db import models
-from django.db.models import Count
 from django.utils import timezone
 
 
@@ -11,6 +10,7 @@ class Dish(models.Model):
     price = models.FloatField()
     preparation_time = models.IntegerField()
     is_vege = models.BooleanField()
+    picture = models.ImageField(default='default.jpg')
     created = models.DateTimeField(editable=False)
     modified = models.DateTimeField(auto_now=True)
 
@@ -29,7 +29,7 @@ class Menu(models.Model):
     description = models.TextField(max_length=1000)
     created = models.DateTimeField(editable=False)
     modified = models.DateTimeField(auto_now=True)
-    dishes = models.ManyToManyField(Dish)
+    dishes = models.ManyToManyField(Dish, blank=True)
 
     def __str__(self):
         return f'{self.name}: {self.dishes.count()}'

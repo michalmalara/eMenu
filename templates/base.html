@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>eMenu</title>
+</head>
+<body>
+
+{% if user.is_authenticated %}
+    Witaj, {{ user.username }}! <a href="logout/">Wyloguj się</a>
+{% else %}
+    <a href="login/">Zaloguj się</a>
+{% endif %}
+<br/><br/>
+{% block body %}
+{% endblock %}
+
+</body>
+</html>

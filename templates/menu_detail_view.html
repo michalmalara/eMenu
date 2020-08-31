@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block body %}
+
+<a href="/"><= Powrót</a>
+    <h1>
+    {{ object.name }}
+    </h1>
+    <p>
+    {{ object.description }}
+    </p>
+    <ul>
+        {% for dish in menu.dishes.all %}
+            <li><a href="/dish_detail/{{ dish.pk }}">{{ dish.name }}</a></li>
+        {% endfor %}
+    </ul>
+
+{% endblock %}
