@@ -25,11 +25,11 @@ class Dish(models.Model):
 
 
 class Menu(models.Model):
-    name = models.TextField(max_length=50, unique=True)
-    description = models.TextField(max_length=1000)
-    created = models.DateTimeField(editable=False)
-    modified = models.DateTimeField(auto_now=True)
-    dishes = models.ManyToManyField(Dish, blank=True)
+    name = models.TextField(max_length=50, unique=True, verbose_name='Nazwa')
+    description = models.TextField(max_length=1000, verbose_name='Opis')
+    created = models.DateTimeField(editable=False, verbose_name='Utworzono')
+    modified = models.DateTimeField(auto_now=True, verbose_name='Zmodyfikowano')
+    dishes = models.ManyToManyField(Dish, blank=True, verbose_name='Dania')
 
     def __str__(self):
         return f'{self.name}: {self.dishes.count()}'

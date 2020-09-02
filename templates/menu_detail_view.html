@@ -8,10 +8,18 @@
     <p>
     {{ object.description }}
     </p>
-    <ul>
+    <p>Dania:</p>
+    <table style="border-width: 5px; border-color: black">
+    <tr>
+        <td>Nazwa</td>
+        <td>Cena</td>
+    </tr>
         {% for dish in menu.dishes.all %}
-            <li><a href="/dish_detail/{{ dish.pk }}">{{ dish.name }}</a></li>
+            <tr>
+                <td><a href="/dish_detail/{{ dish.pk }}">{{ dish.name }}</a></td>
+                <td>{{ dish.price }} zł</td>
+            </tr>
         {% endfor %}
-    </ul>
+    </table>
 
 {% endblock %}

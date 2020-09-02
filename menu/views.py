@@ -1,6 +1,9 @@
+from django import forms
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render
-from django.views.generic import ListView, DetailView
+from django.urls import reverse
+from django.views.generic import ListView, DetailView, CreateView
 from django.template.defaulttags import register
 
 from menu.forms import MenuSearchForm
@@ -74,3 +77,16 @@ class MenuDetailView(DetailView):
 class DishDetailView(DetailView):
     model = Dish
     template_name = 'dish_detail_view.html'
+
+
+class MenuCreateView(LoginRequiredMixin, CreateView):
+    model = Menu
+    fields = ('name', 'description', 'dishes')
+    template_name = 'create_menu_view.html'
+    success_url = '/'
+
+    def get_form(self, form_class=None):
+        if form_class is None:
+            form_class = self.get_form_class()
+        form_class.__dict__['base_fields']['name'].widget = (forms.TextInput())
+        return form_class(**self.get_form_kwargs())

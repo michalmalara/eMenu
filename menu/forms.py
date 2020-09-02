@@ -3,9 +3,9 @@ from django import forms
 from menu.models import Menu
 
 DIRECTION = (
-        ('ASC', 'rosnąco'),
-        ('DESC', 'malejąco')
-    )
+    ('ASC', 'rosnąco'),
+    ('DESC', 'malejąco')
+)
 
 
 class MenuSearchForm(forms.ModelForm):
@@ -20,12 +20,14 @@ class MenuSearchForm(forms.ModelForm):
     edited_starting_date = forms.DateField(label='Zmodyfikowno po dniu')
     edited_ending_date = forms.DateField(label='Zmodyfikowno przed dniem')
 
-
     class Meta:
         model = Menu
         fields = ('name',)
         labels = {
             'name': 'Szukaj',
+        }
+        widgets = {
+            'name': forms.TextInput
         }
 
     def __init__(self, *args, **kwargs):
