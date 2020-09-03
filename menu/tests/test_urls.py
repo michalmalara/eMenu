@@ -1,7 +1,7 @@
 from django.test import SimpleTestCase
 from django.urls import resolve, reverse
 
-from menu.views import MenuListView, MenuDetailView, DishDetailView
+from menu.views import MenuListView, MenuDetailView, DishDetailView, MenuCreateView, DishCreateView, AddDishToMenu
 from django.contrib.auth import views as auth_views
 
 
@@ -20,6 +20,21 @@ class TestUrls(SimpleTestCase):
         url = reverse('dish_detail', args=[0])
         self.assertEquals(resolve(url).func.__name__, DishDetailView.as_view().__name__)
         self.assertTemplateUsed('dish_detail_view.html')
+
+    def test_create_menu_url_is_ok(self):
+        url = reverse('create_menu')
+        self.assertEquals(resolve(url).func.__name__, MenuCreateView.as_view().__name__)
+        self.assertTemplateUsed('create_menu_view.html')
+
+    def test_create_dish_url_is_ok(self):
+        url = reverse('create_dish')
+        self.assertEquals(resolve(url).func.__name__, DishCreateView.as_view().__name__)
+        self.assertTemplateUsed('create_dish_view.html')
+
+    def test_add_dish_to_menu_url_is_ok(self):
+        url = reverse('add_dish_to_menu', args=[0])
+        self.assertEquals(resolve(url).func.__name__, AddDishToMenu.as_view().__name__)
+        self.assertTemplateUsed('add_dish_to_menu.html')
 
     def test_login_url_is_ok(self):
         url = reverse('login')

@@ -1,7 +1,6 @@
 from django import forms
-from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import render
+from django.shortcuts import redirect
 from django.urls import reverse
 from django.views.generic import ListView, DetailView, CreateView
 from django.template.defaulttags import register
@@ -90,3 +89,37 @@ class MenuCreateView(LoginRequiredMixin, CreateView):
             form_class = self.get_form_class()
         form_class.__dict__['base_fields']['name'].widget = (forms.TextInput())
         return form_class(**self.get_form_kwargs())
+
+
+class DishCreateView(LoginRequiredMixin, CreateView):
+    model = Dish
+    fields = ('name', 'description', 'price', 'preparation_time', 'is_vege', 'picture')
+    template_name = 'create_menu_view.html'
+    success_url = '/'
+
+    def get_form(self, form_class=None):
+        if form_class is None:
+            form_class = self.get_form_class()
+        form_class.__dict__['base_fields']['name'].widget = (forms.TextInput())
+        return form_class(**self.get_form_kwargs())
+
+
+class AddDishToMenu(LoginRequiredMixin, ListView):
+    model = Dish
+    template_name = 'add_dish_to_menu.html'
+
+    def post(self, *args, **kwargs):
+        menu_queryset = Menu.objects.get(pk=self.kwargs['pk'])
+        menu_queryset.dishes.add(self.request.POST['dish_pk'])
+        menu_queryset.save()
+        return redirect(reverse('add_dish_to_menu', args=[self.kwargs['pk']]), )
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        menu_queryset = Menu.objects.get(pk=self.kwargs['pk'])
+        dishes_pk = [mpk.pk for mpk in menu_queryset.dishes.all()]
+
+        objects = Dish.objects.all().exclude(pk__in=dishes_pk)
+
+        return super().get_context_data(
+            object_list=objects
+        )

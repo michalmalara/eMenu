@@ -40,6 +40,15 @@ class TestViews(TestCase):
 
         self.menu_queryset[0].dishes.set(self.dish_queryset)
 
+    def test_user_not_logged_in(self):
+        url = reverse('create_menu')
+        response = self.client.get(url)
+        self.assertEquals(response.status_code, 302)
+
+        url = reverse('add_dish_to_menu', args=['0'])
+        response = self.client.get(url)
+        self.assertEquals(response.status_code, 302)
+
     def test_home_view(self):
         url = reverse('home')
         response = self.client.get(url)
@@ -91,24 +100,37 @@ class TestViews(TestCase):
 
         self.assertEquals(func_resp, 'sort_by=name&ascending=true')
 
-    def test_user_not_logged_in(self):
+    def test_create_menu_view(self):
+        self.client.login(username='testuser1', password='abcd')
         url = reverse('create_menu')
         response = self.client.get(url)
+
+        self.assertEquals(response.status_code, 200)
+
+    def test_create_dish_view(self):
+        self.client.login(username='testuser1', password='abcd')
+        url = reverse('create_dish')
+        response = self.client.get(url)
+
+        self.assertEquals(response.status_code, 200)
+
+    def test_create_dish_view(self):
+        self.client.login(username='testuser1', password='abcd')
+        url = reverse('create_dish')
+        response = self.client.get(url)
+
+        self.assertEquals(response.status_code, 200)
+
+    def test_add_dish_to_menu_view(self):
+        self.client.login(username='testuser1', password='abcd')
+        url = reverse('add_dish_to_menu', args=[self.menu_queryset[0].pk])
+        response = self.client.get(url)
+
+        self.assertEquals(response.status_code, 200)
+
+    def test_add_dish_to_menu_view(self):
+        self.client.login(username='testuser1', password='abcd')
+        url = reverse('add_dish_to_menu', args=[self.menu_queryset[0].pk])
+        response = self.client.post(url, {'dish_pk': str(self.dish_queryset[5].pk)})
+        print(response.status_code)
         self.assertEquals(response.status_code, 302)
-
-    def test_create_menu(self):
-        url = reverse('create_menu')
-        self.client.login(username='testuser1', password='abcd')
-        response = self.client.get(url)
-
-        self.assertEquals(response.status_code, 200)
-
-    def test_menu_is_created(self):
-        url = reverse('create_menu')
-        self.client.login(username='testuser1', password='abcd')
-        response = self.client.post(url, {'name': 'test menu', 'description': 'test desc'})
-        queryset = Menu.objects.all()
-        self.assertEquals(response.status_code, 200)
-
-        self.assertEquals(queryset[50].name, 'test menu')
-        self.assertEquals(queryset[50].description, 'test desc')

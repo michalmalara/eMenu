@@ -1,20 +1,23 @@
 {% extends 'base.html' %}
 {% block body %}
     <form method="get" action="">
-  {{search_form.as_p}}
-  <button type="submit">Szukaj</button>
-</form>
+    {{search_form.as_p}}
+      <button type="submit">Szukaj</button>
+    </form>
     <br/><br/>
 
-<table border="1">
-{% for object in object_list %}
-    <tr><td><a href="menu_detail/{{ object.pk }}">{{ object.name }}</a></td><td>{{ object.description }}</td></tr>
-{% endfor %}
-</table>
+    <table border="1">
+    {% for object in object_list %}
+        <tr><td><a href="menu_detail/{{ object.pk }}">{{ object.name }}</a></td><td>{{ object.description }}</td></tr>
+    {% endfor %}
+    </table>
 
-{% include "_pagination.html" %}
+    {% include "_pagination.html" %}
 
-<br/><br/>
-<a href="create_menu">Dodaj menu</a>
+    <br/><br/>
+    {% if user.is_authenticated %}
+        <a href="create_menu">Dodaj menu</a><br/>
+        <a href="create_dish">Dodaj danie</a>
+    {% endif %}
 
 {% endblock %}

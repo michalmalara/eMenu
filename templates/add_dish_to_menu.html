@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block body %}
+    <a href="/"><= Powrót</a>
+<br/><br/>
+    <table>
+    {% for object in object_list %}
+        <tr>
+            <td>
+                {{ object.name }}
+            </td>
+                <td>
+                    <form method="POST">{% csrf_token %}
+                        <input type="hidden" name="dish_pk" value="{{ object.pk }}">
+                        <input type="submit" class="btn" value="Dodaj">
+                    </form>
+                </td>
+            </tr>
+    {%  endfor %}
+    </table>
+{% endblock %}
