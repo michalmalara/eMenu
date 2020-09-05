@@ -1,5 +1,7 @@
 from django import forms
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.http import HttpResponse
 from django.shortcuts import redirect
 from django.urls import reverse
 from django.views.generic import ListView, DetailView, CreateView
@@ -72,6 +74,21 @@ class MenuDetailView(DetailView):
     model = Menu
     template_name = 'menu_detail_view.html'
 
+    def post(self, *args, **kwargs):
+        if self.request.user.is_authenticated:
+            menu_queryset = Menu.objects.get(pk=self.kwargs['pk'])
+            menu_queryset.dishes.remove(self.request.POST['dish_pk'])
+            menu_queryset.save()
+            return redirect(reverse('menu_detail', args=[self.kwargs['pk']]))
+        else:
+            return HttpResponse('Tylko zalogowani użytkownicy mogą to zrobić.', status=403)
+
+
+class DishListView(ListView):
+    model = Dish
+    template_name = 'dish_list_view.html'
+    paginate_by = 10
+
 
 class DishDetailView(DetailView):
     model = Dish
@@ -84,24 +101,17 @@ class MenuCreateView(LoginRequiredMixin, CreateView):
     template_name = 'create_menu_view.html'
     success_url = '/'
 
-    def get_form(self, form_class=None):
-        if form_class is None:
-            form_class = self.get_form_class()
-        form_class.__dict__['base_fields']['name'].widget = (forms.TextInput())
-        return form_class(**self.get_form_kwargs())
-
 
 class DishCreateView(LoginRequiredMixin, CreateView):
     model = Dish
     fields = ('name', 'description', 'price', 'preparation_time', 'is_vege', 'picture')
-    template_name = 'create_menu_view.html'
+    template_name = 'create_dish_view.html'
     success_url = '/'
 
-    def get_form(self, form_class=None):
-        if form_class is None:
-            form_class = self.get_form_class()
-        form_class.__dict__['base_fields']['name'].widget = (forms.TextInput())
-        return form_class(**self.get_form_kwargs())
+    def form_valid(self, form):
+        """If the form is valid, save the associated model."""
+        print(form)
+        return super().form_valid(form)
 
 
 class AddDishToMenu(LoginRequiredMixin, ListView):
@@ -112,7 +122,7 @@ class AddDishToMenu(LoginRequiredMixin, ListView):
         menu_queryset = Menu.objects.get(pk=self.kwargs['pk'])
         menu_queryset.dishes.add(self.request.POST['dish_pk'])
         menu_queryset.save()
-        return redirect(reverse('add_dish_to_menu', args=[self.kwargs['pk']]), )
+        return redirect(reverse('add_dish_to_menu', args=[self.kwargs['pk']]))
 
     def get_context_data(self, *, object_list=None, **kwargs):
         menu_queryset = Menu.objects.get(pk=self.kwargs['pk'])
@@ -120,6 +130,9 @@ class AddDishToMenu(LoginRequiredMixin, ListView):
 
         objects = Dish.objects.all().exclude(pk__in=dishes_pk)
 
+        return_url = reverse('menu_detail', args=[self.kwargs['pk']])
+
         return super().get_context_data(
-            object_list=objects
+            object_list=objects,
+            return_url=return_url,
         )

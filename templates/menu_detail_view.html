@@ -18,6 +18,14 @@
             <tr>
                 <td><a href="/dish_detail/{{ dish.pk }}">{{ dish.name }}</a></td>
                 <td>{{ dish.price }} zł</td>
+                {% if user.is_authenticated %}
+                    <td>
+                        <form method="POST">{% csrf_token %}
+                            <input type="hidden" name="dish_pk" value="{{ dish.pk }}">
+                            <input type="submit" class="btn" value="Usuń z menu">
+                        </form>
+                    </td>
+                {% endif %}
             </tr>
         {% endfor %}
     </table>

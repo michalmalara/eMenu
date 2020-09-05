@@ -49,6 +49,10 @@ class TestViews(TestCase):
         response = self.client.get(url)
         self.assertEquals(response.status_code, 302)
 
+        url = reverse('menu_detail', args=['0'])
+        response = self.client.post(url, {'dish_id': '4'})
+        self.assertEquals(response.status_code, 403)
+
     def test_home_view(self):
         url = reverse('home')
         response = self.client.get(url)
@@ -64,6 +68,22 @@ class TestViews(TestCase):
         response = self.client.get(url + '?page=2')
         for i in range(10, 20):
             self.assertContains(response, f'menu {i}')
+
+    def test_dish_list_view(self):
+        url = reverse('dish_list')
+        response = self.client.get(url)
+        self.assertEquals(response.status_code, 200)
+
+    def test_dish_list_view_pagination(self):
+        url = reverse('dish_list')
+        response = self.client.get(url)
+
+        for i in range(10):
+            self.assertContains(response, f'danie {i}')
+
+        response = self.client.get(url + '?page=2')
+        for i in range(10, 20):
+            self.assertContains(response, f'danie {i}')
 
     def test_home_view_searching(self):
         url = reverse('home')
@@ -132,5 +152,12 @@ class TestViews(TestCase):
         self.client.login(username='testuser1', password='abcd')
         url = reverse('add_dish_to_menu', args=[self.menu_queryset[0].pk])
         response = self.client.post(url, {'dish_pk': str(self.dish_queryset[5].pk)})
-        print(response.status_code)
+
+        self.assertEquals(response.status_code, 302)
+
+    def test_remove_dish_from_menu(self):
+        self.client.login(username='testuser1', password='abcd')
+        url = reverse('menu_detail', args=[self.menu_queryset[0].pk])
+        response = self.client.post(url, {'dish_pk': str(self.dish_queryset[5].pk)})
+
         self.assertEquals(response.status_code, 302)

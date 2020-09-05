@@ -16,8 +16,9 @@
 
     <br/><br/>
     {% if user.is_authenticated %}
-        <a href="create_menu">Dodaj menu</a><br/>
-        <a href="create_dish">Dodaj danie</a>
+        <a href="create_menu">+ Dodaj menu</a><br/>
+        <a href="create_dish">+ Dodaj danie</a><br/><br/>
     {% endif %}
+    <a href="dish_list">Lista dań</a>
 
 {% endblock %}

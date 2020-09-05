@@ -1,8 +1,12 @@
 {% extends 'base.html' %}
 {% block body %}
     <a href="/"><= Powrót</a>
-<br/><br/>
+    <br/><br/>
+    {% if object_list.count is 0 %}
+        <p>Wszystkie dostępne dania zostały już dodane do tego menu.</p>
+    {% else %}
     <table>
+
     {% for object in object_list %}
         <tr>
             <td>
@@ -17,4 +21,5 @@
             </tr>
     {%  endfor %}
     </table>
+    {% endif %}
 {% endblock %}

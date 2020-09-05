@@ -1,7 +1,8 @@
 {% extends 'base.html' %}
 {% block body %}
-    <a href="/"><= Powrót</a>
-
+    <script>
+      document.write('<a href="' + document.referrer + '"><= Powrót</a>');
+    </script>
     <form method="POST">
         {% csrf_token %}
         {{ form.as_p }}

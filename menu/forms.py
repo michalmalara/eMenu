@@ -1,6 +1,6 @@
 from django import forms
 
-from menu.models import Menu
+from menu.models import Dish
 
 DIRECTION = (
     ('ASC', 'rosnąco'),
@@ -8,7 +8,8 @@ DIRECTION = (
 )
 
 
-class MenuSearchForm(forms.ModelForm):
+class MenuSearchForm(forms.Form):
+    name = forms.CharField(max_length=100, label='Nazwa')
     SORTING = ('name', 'created', 'modified',)
     SORTING_NAMES = ('nazwa', 'utworzono', 'zmodyfikowano')
     sorting = forms.ChoiceField(choices=[('', '')] + list(zip(SORTING, SORTING_NAMES)), label='Sortuj po')
@@ -19,16 +20,6 @@ class MenuSearchForm(forms.ModelForm):
 
     edited_starting_date = forms.DateField(label='Zmodyfikowno po dniu')
     edited_ending_date = forms.DateField(label='Zmodyfikowno przed dniem')
-
-    class Meta:
-        model = Menu
-        fields = ('name',)
-        labels = {
-            'name': 'Szukaj',
-        }
-        widgets = {
-            'name': forms.TextInput
-        }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
