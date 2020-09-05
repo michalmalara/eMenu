@@ -29,7 +29,7 @@ class Menu(models.Model):
     description = models.TextField(max_length=1000, verbose_name='Opis')
     created = models.DateTimeField(editable=False, verbose_name='Utworzono')
     modified = models.DateTimeField(auto_now=True, verbose_name='Zmodyfikowano')
-    dishes = models.ManyToManyField(Dish, blank=True, verbose_name='Dania')
+    dishes = models.ManyToManyField(Dish, blank=True, verbose_name='Dania', related_name='menus')
 
     def __str__(self):
         return f'{self.name}: {self.dishes.count()}'

@@ -27,6 +27,7 @@ from eMenu import settings
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('menu.urls')),
+    path(r'api/', include('menu.api_urls'))
 ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

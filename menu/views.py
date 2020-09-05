@@ -108,11 +108,6 @@ class DishCreateView(LoginRequiredMixin, CreateView):
     template_name = 'create_dish_view.html'
     success_url = '/'
 
-    def form_valid(self, form):
-        """If the form is valid, save the associated model."""
-        print(form)
-        return super().form_valid(form)
-
 
 class AddDishToMenu(LoginRequiredMixin, ListView):
     model = Dish

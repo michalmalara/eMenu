@@ -3,6 +3,7 @@ from django.contrib.auth import views as auth_views
 
 from menu import views
 
+# Views URLs
 urlpatterns = [
     path(r'', views.MenuListView.as_view(), name='home'),
     path(r'menu_detail/<int:pk>', views.MenuDetailView.as_view(), name='menu_detail'),
