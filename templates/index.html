@@ -7,8 +7,21 @@
     <br/><br/>
 
     <table border="1">
+    <tr>
+        <td>Nazwa</td><td>Opis</td><td>Liczba dań</td>
+    </tr>
     {% for object in object_list %}
-        <tr><td><a href="menu_detail/{{ object.pk }}">{{ object.name }}</a></td><td>{{ object.description }}</td></tr>
+        <tr>
+            <td>
+                <a href="menu_detail/{{ object.pk }}">{{ object.name }}</a>
+            </td>
+            <td>
+                {{ object.description }}
+            </td>
+            <td>
+                {{ object.dishes_count }}
+            </td>
+        </tr>
     {% endfor %}
     </table>
 

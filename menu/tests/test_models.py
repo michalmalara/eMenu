@@ -31,4 +31,4 @@ class TestMenuModel(TestCase):
 
     def test_menu_created(self):
         self.assertEquals(len(self.queryset), 1)
-        self.assertEquals(self.queryset[0].__str__(), f'{self.object1.name}: 0')
+        self.assertEquals(self.queryset[0].__str__(), f'{self.object1.name}')

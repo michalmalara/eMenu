@@ -78,6 +78,7 @@ class MenuDetailView(DetailView):
         if self.request.user.is_authenticated:
             menu_queryset = Menu.objects.get(pk=self.kwargs['pk'])
             menu_queryset.dishes.remove(self.request.POST['dish_pk'])
+            menu_queryset.dishes_count = menu_queryset.dishes.count()
             menu_queryset.save()
             return redirect(reverse('menu_detail', args=[self.kwargs['pk']]))
         else:
@@ -97,7 +98,7 @@ class DishDetailView(DetailView):
 
 class MenuCreateView(LoginRequiredMixin, CreateView):
     model = Menu
-    fields = ('name', 'description', 'dishes')
+    fields = ('name', 'description')
     template_name = 'create_menu_view.html'
     success_url = '/'
 
@@ -116,6 +117,7 @@ class AddDishToMenu(LoginRequiredMixin, ListView):
     def post(self, *args, **kwargs):
         menu_queryset = Menu.objects.get(pk=self.kwargs['pk'])
         menu_queryset.dishes.add(self.request.POST['dish_pk'])
+        menu_queryset.dishes_count = menu_queryset.dishes.count()
         menu_queryset.save()
         return redirect(reverse('add_dish_to_menu', args=[self.kwargs['pk']]))
 

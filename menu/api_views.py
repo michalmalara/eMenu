@@ -1,3 +1,4 @@
+import rest_framework
 from rest_framework import filters
 from rest_framework import viewsets
 
@@ -17,15 +18,47 @@ def create_auth_token(sender, instance=None, created=False, **kwargs):
 
 
 class MenuDetailApiView(viewsets.ModelViewSet):
+    """
+    Private viewset for reading, creating, updating and deleting objects in Menu table. Only for logged in users.
+    """
     queryset = Menu.objects.all()
     serializer_class = MenuSerializer
+    permission_classes = [rest_framework.permissions.IsAuthenticated]
     search_fields = ['name']
     filterset_fields = ['created', 'modified', 'dishes']
-    ordering_fields = ['created', 'modified']
+    ordering_fields = ['created', 'modified', 'dishes_count']
+
 
 class DishDetailApiView(viewsets.ModelViewSet):
+    """
+    Private viewset for reading, creating, updating and deleting objects in Dish table. Only for logged in users.
+    """
     queryset = Dish.objects.all()
     serializer_class = DishSerializer
+    permission_classes = [rest_framework.permissions.IsAuthenticated]
+    search_fields = ['name']
+    filterset_fields = ['created', 'modified', 'is_vege']
+    ordering_fields = ['created', 'modified']
+
+class MenuListPublicApiView(viewsets.ReadOnlyModelViewSet):
+    """
+    Public viewset for reading Menu table by GET method only.
+    """
+    queryset = Menu.objects.all()
+    serializer_class = MenuSerializer
+    permission_classes = []
+    search_fields = ['name']
+    filterset_fields = ['created', 'modified', 'dishes']
+    ordering_fields = ['created', 'modified', 'dishes_count']
+
+
+class DishDetailPublicApiView(viewsets.ReadOnlyModelViewSet):
+    """
+    Public viewset for reading Dish table by GET method only.
+    """
+    queryset = Dish.objects.all()
+    serializer_class = DishSerializer
+    permission_classes = []
     search_fields = ['name']
     filterset_fields = ['created', 'modified', 'is_vege']
     ordering_fields = ['created', 'modified']

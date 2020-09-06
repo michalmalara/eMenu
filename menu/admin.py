@@ -4,9 +4,9 @@ from .models import Menu, Dish
 
 
 class MenuAdminView(admin.ModelAdmin):
-    list_display = ['id', 'name',  'created', 'modified', 'dishes_length']
+    list_display = ['id', 'name',  'created', 'modified']
     search_fields = ['name']
-    readonly_fields = ['created',  'modified', 'dishes_length']
+    readonly_fields = ['created',  'modified']
 
     filter_horizontal = ('dishes', )
     list_filter = ('created',  'modified')
