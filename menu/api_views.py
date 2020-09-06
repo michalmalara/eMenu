@@ -1,3 +1,4 @@
+from rest_framework import filters
 from rest_framework import viewsets
 
 from .models import Menu, Dish
@@ -18,7 +19,13 @@ def create_auth_token(sender, instance=None, created=False, **kwargs):
 class MenuDetailApiView(viewsets.ModelViewSet):
     queryset = Menu.objects.all()
     serializer_class = MenuSerializer
+    search_fields = ['name']
+    filterset_fields = ['created', 'modified', 'dishes']
+    ordering_fields = ['created', 'modified']
 
 class DishDetailApiView(viewsets.ModelViewSet):
     queryset = Dish.objects.all()
     serializer_class = DishSerializer
+    search_fields = ['name']
+    filterset_fields = ['created', 'modified', 'is_vege']
+    ordering_fields = ['created', 'modified']

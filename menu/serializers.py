@@ -4,17 +4,15 @@ from menu.models import Menu, Dish
 
 
 class MenuSerializer(serializers.HyperlinkedModelSerializer):
-    dishes = serializers.PrimaryKeyRelatedField(
-        many=True,
-        read_only=True,
-    )
-
     class Meta:
         model = Menu
         fields = '__all__'
 
+    def get_dishes_count(self, obj):
+        return obj.dishes.count()
+
 
 class DishSerializer(serializers.ModelSerializer):
     class Meta:
-        model=Dish
+        model = Dish
         fields = '__all__'

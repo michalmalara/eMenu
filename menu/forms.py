@@ -10,8 +10,8 @@ DIRECTION = (
 
 class MenuSearchForm(forms.Form):
     name = forms.CharField(max_length=100, label='Nazwa')
-    SORTING = ('name', 'created', 'modified',)
-    SORTING_NAMES = ('nazwa', 'utworzono', 'zmodyfikowano')
+    SORTING = ('name', 'created', 'modified', 'dishes_length')
+    SORTING_NAMES = ('nazwa', 'utworzono', 'zmodyfikowano', 'Liczba dań')
     sorting = forms.ChoiceField(choices=[('', '')] + list(zip(SORTING, SORTING_NAMES)), label='Sortuj po')
     sorting_direction = forms.ChoiceField(choices=DIRECTION, label='Kierunek sortowania')
 

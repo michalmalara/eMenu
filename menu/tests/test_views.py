@@ -1,11 +1,10 @@
 from django.contrib.auth.models import User
-from django.db.models.functions import datetime
 from django.test import TestCase, RequestFactory
 from django.test import Client
 from django.urls import reverse
 
 from menu.models import Menu, Dish
-from menu.views import param_replace, MenuCreateView
+from menu.views import param_replace
 
 
 class TestViews(TestCase):
