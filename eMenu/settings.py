@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'menu',
 
     'rest_framework',
-    'rest_framework_swagger',
+    'drf_yasg',
     'rest_framework.authtoken',
 
     'django_filters',
@@ -57,6 +57,11 @@ REST_FRAMEWORK = {
         'rest_framework.filters.SearchFilter',
         'rest_framework.filters.OrderingFilter',
     ),
+}
+
+SWAGGER_SETTINGS = {
+    'LOGIN_URL': '/login',
+    'LOGOUT_URL': '/logout'
 }
 
 MIDDLEWARE = [
