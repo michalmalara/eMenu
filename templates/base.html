@@ -10,7 +10,7 @@
 {% if user.is_authenticated %}
     Witaj, {{ user.username }}! <a href="logout/">Wyloguj się</a>
 {% else %}
-    <a href="login/">Zaloguj się</a>
+    <a href="/login/">Zaloguj się</a>
 {% endif %}
 <br/><br/>
 {% block body %}

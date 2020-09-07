@@ -52,6 +52,9 @@ class MenuListPublicApiView(viewsets.ReadOnlyModelViewSet):
     filterset_fields = ['created', 'modified', 'dishes']
     ordering_fields = ['created', 'modified', 'dishes_count']
 
+    def get_queryset(self):
+        return Menu.objects.all().exclude(dishes_count__lt=1)
+
 
 class DishDetailPublicApiView(viewsets.ReadOnlyModelViewSet):
     """

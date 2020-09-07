@@ -26,7 +26,14 @@ def param_replace(context, **kwargs):
 class MenuListView(ListView):
     model = Menu
     template_name = 'index.html'
+    ordering = 'pk'
     paginate_by = 10
+
+    def get_queryset(self):
+        if self.request.user.is_authenticated:
+            return Menu.objects.all()
+        else:
+            return Menu.objects.all().exclude(dishes_count__lt=1)
 
     def get_context_data(self, *, object_list=None, **kwargs):
         queryset = object_list if object_list is not None else self.object_list
@@ -78,8 +85,6 @@ class MenuDetailView(DetailView):
         if self.request.user.is_authenticated:
             menu_queryset = Menu.objects.get(pk=self.kwargs['pk'])
             menu_queryset.dishes.remove(self.request.POST['dish_pk'])
-            menu_queryset.dishes_count = menu_queryset.dishes.count()
-            menu_queryset.save()
             return redirect(reverse('menu_detail', args=[self.kwargs['pk']]))
         else:
             return HttpResponse('Tylko zalogowani użytkownicy mogą to zrobić.', status=403)
@@ -98,7 +103,7 @@ class DishDetailView(DetailView):
 
 class MenuCreateView(LoginRequiredMixin, CreateView):
     model = Menu
-    fields = ('name', 'description')
+    fields = ('name', 'description', 'dishes')
     template_name = 'create_menu_view.html'
     success_url = '/'
 

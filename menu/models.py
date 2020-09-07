@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils import timezone
+from django.db.models.signals import m2m_changed
 
 # Create your models here.
 
@@ -29,7 +30,7 @@ class Menu(models.Model):
     created = models.DateTimeField(editable=False, verbose_name='Utworzono')
     modified = models.DateTimeField(auto_now=True, verbose_name='Zmodyfikowano')
     dishes = models.ManyToManyField(Dish, blank=True, verbose_name='Dania')
-    dishes_count = models.IntegerField(default=0, verbose_name='Liczba dań w karcie')
+    dishes_count = models.IntegerField(default=0, verbose_name='Liczba dań w karcie', editable=False)
 
     def __str__(self):
         return f'{self.name}'
@@ -38,7 +39,14 @@ class Menu(models.Model):
         if not self.id:
             self.created = timezone.now()
         self.modified = timezone.now()
-
         return super(Menu, self).save(*args, **kwargs)
+
+def dishes_changed(sender, **kwargs):
+        if (kwargs['action']=='post_add') or (kwargs['action']=='post_remove'):
+            queryset = Menu.objects.get(pk=kwargs['instance'].pk)
+            queryset.dishes_count = queryset.dishes.count()
+            queryset.save()
+
+m2m_changed.connect(dishes_changed, sender=Menu.dishes.through)
 
 

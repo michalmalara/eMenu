@@ -31,7 +31,6 @@ class TestViews(TestCase):
                 self.dish1.is_vege = True
             else:
                 self.dish1.is_vege = False
-
             self.dish1.save()
 
         self.menu_queryset = Menu.objects.all()
@@ -57,10 +56,25 @@ class TestViews(TestCase):
         response = self.client.get(url)
         self.assertEquals(response.status_code, 200)
 
-    def test_home_view_pagination(self):
+    def test_home_view_user_not_logged_in(self):
         url = reverse('home')
         response = self.client.get(url)
 
+        queryset = Menu.objects.get(pk=30)
+        queryset.dishes.add('1')
+        queryset.save()
+
+        queryset = Menu.objects.filter(dishes_count__gt=0)
+
+        for q in queryset:
+            print(q.name)
+            self.assertContains(response, q.name)
+
+    def test_home_view_pagination(self):
+        url = reverse('home')
+        self.client.login(username='testuser1', password='abcd')
+
+        response = self.client.get(url)
         for i in range(10):
             self.assertContains(response, f'menu {i}')
 
@@ -75,8 +89,9 @@ class TestViews(TestCase):
 
     def test_dish_list_view_pagination(self):
         url = reverse('dish_list')
-        response = self.client.get(url)
+        self.client.login(username='testuser1', password='abcd')
 
+        response = self.client.get(url)
         for i in range(10):
             self.assertContains(response, f'danie {i}')
 
@@ -86,6 +101,7 @@ class TestViews(TestCase):
 
     def test_home_view_searching(self):
         url = reverse('home')
+        self.client.login(username='testuser1', password='abcd')
 
         response = self.client.get(url + '?name=24')
         self.assertContains(response, 'menu 24')
@@ -147,12 +163,23 @@ class TestViews(TestCase):
 
         self.assertEquals(response.status_code, 200)
 
-    def test_add_dish_to_menu_view(self):
+    def test_adding_dish_to_menu_view(self):
+        test_menu = Menu()
+        test_menu.name = 'Test menu'
+        test_menu.description = 'Test description'
+        test_menu.save()
+
+        test_menu_queryset = Menu.objects.get(pk=test_menu.pk)
+
         self.client.login(username='testuser1', password='abcd')
-        url = reverse('add_dish_to_menu', args=[self.menu_queryset[0].pk])
-        response = self.client.post(url, {'dish_pk': str(self.dish_queryset[5].pk)})
+        url = reverse('add_dish_to_menu', args=[test_menu_queryset.pk])
+        response = self.client.post(url, {'dish_pk': '5'})
+
+        test_menu_queryset = Menu.objects.get(pk=test_menu.pk)
 
         self.assertEquals(response.status_code, 302)
+        self.assertEquals(test_menu_queryset.dishes_count, 1)
+        self.assertEquals(test_menu_queryset.dishes.count(), 1)
 
     def test_remove_dish_from_menu(self):
         self.client.login(username='testuser1', password='abcd')
