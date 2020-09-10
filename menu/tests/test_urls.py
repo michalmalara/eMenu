@@ -7,7 +7,6 @@ from django.contrib.auth import views as auth_views
 
 
 class TestUrls(SimpleTestCase):
-
     def test_login_url_is_ok(self):
         url = reverse('login')
         self.assertEquals(resolve(url).func.__name__, auth_views.LoginView.as_view().__name__)

@@ -2,14 +2,11 @@ import rest_framework
 from rest_framework import viewsets, permissions
 
 from .models import Menu, Dish
-from .serializers import (MenuSerializer, DishSerializer)
-
+from .serializers import MenuSerializer, DishSerializer
 from django.conf import settings
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from rest_framework.authtoken.models import Token
-
-
 
 
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)
@@ -18,7 +15,7 @@ def create_auth_token(sender, instance=None, created=False, **kwargs):
         Token.objects.create(user=instance)
 
 
-class MenuDetailApiView(viewsets.ModelViewSet):
+class MenuApiView(viewsets.ModelViewSet):
     """
     Private viewset for reading, creating, updating and deleting objects in Menu table. Only for logged in users.
     """
@@ -30,7 +27,7 @@ class MenuDetailApiView(viewsets.ModelViewSet):
     ordering_fields = ['created', 'modified', 'dishes_count']
 
 
-class DishDetailApiView(viewsets.ModelViewSet):
+class DishApiView(viewsets.ModelViewSet):
     """
     Private viewset for reading, creating, updating and deleting objects in Dish table. Only for logged in users.
     """
@@ -40,6 +37,7 @@ class DishDetailApiView(viewsets.ModelViewSet):
     search_fields = ['name']
     filterset_fields = ['created', 'modified', 'is_vege']
     ordering_fields = ['created', 'modified']
+
 
 class MenuListPublicApiView(viewsets.ReadOnlyModelViewSet):
     """

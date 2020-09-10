@@ -2,8 +2,6 @@ from django.db import models
 from django.utils import timezone
 from django.db.models.signals import m2m_changed
 
-# Create your models here.
-
 class Dish(models.Model):
     name = models.CharField(max_length=50, unique=True, verbose_name='Nazwa')
     description = models.TextField(max_length=1000, verbose_name='Opis')
@@ -41,12 +39,12 @@ class Menu(models.Model):
         self.modified = timezone.now()
         return super(Menu, self).save(*args, **kwargs)
 
-# def dishes_changed(sender, **kwargs):
-#         if (kwargs['action']=='post_add') or (kwargs['action']=='post_remove'):
-#             queryset = Menu.objects.get(pk=kwargs['instance'].pk)
-#             queryset.dishes_count = queryset.dishes.count()
-#             queryset.save()
-#
-# m2m_changed.connect(dishes_changed, sender=Menu.dishes.through)
+def dishes_changed(sender, **kwargs):
+        if (kwargs['action']=='post_add') or (kwargs['action']=='post_remove'):
+            queryset = Menu.objects.get(pk=kwargs['instance'].pk)
+            queryset.dishes_count = queryset.dishes.count()
+            queryset.save()
+
+m2m_changed.connect(dishes_changed, sender=Menu.dishes.through)
 
 

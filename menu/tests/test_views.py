@@ -8,7 +8,6 @@ from menu.views import param_replace
 
 
 class TestViews(TestCase):
-
     def setUp(self):
         self.client = Client()
 
@@ -67,7 +66,6 @@ class TestViews(TestCase):
         queryset = Menu.objects.filter(dishes_count__gt=0)
 
         for q in queryset:
-            print(q.name)
             self.assertContains(response, q.name)
 
     def test_home_view_pagination(self):
@@ -114,8 +112,6 @@ class TestViews(TestCase):
 
         response = self.client.get(url + '?sorting=name&sorting_direction=DESC')
         self.assertContains(response, 'menu 49')
-
-    #     TODO: test created_starting_date, created_ending_date, edited_starting_date, edited_ending_date
 
     def test_menu_detail_view(self):
         url = reverse('menu_detail', args=[self.menu_queryset[0].pk])

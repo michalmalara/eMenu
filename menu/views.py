@@ -9,8 +9,6 @@ from django.template.defaulttags import register
 from menu.forms import MenuSearchForm
 from menu.models import Menu, Dish
 
-from .tasks import send_email
-
 
 @register.simple_tag(takes_context=True)
 def param_replace(context, **kwargs):
@@ -95,6 +93,7 @@ class DishListView(ListView):
     model = Dish
     template_name = 'dish_list_view.html'
     paginate_by = 10
+    ordering = 'pk'
 
 
 class DishDetailView(DetailView):
