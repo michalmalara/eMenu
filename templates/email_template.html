@@ -1,0 +1,13 @@
+<h1>Cześć, {{ username }}!</h1>
+<p>Nowe pozycje w naszym menu!</p>
+<ul>
+{% for dish in dishes %}
+    <li><a href="{{ host_url }}dish_detail/{{ dish.pk }}"> {{ dish.name }} </a>- {{ dish.description }}</li>
+{% endfor %}
+</ul>
+Nowe karty:
+<ul>
+    {% for menu in menus %}
+        <li><a href="{{ host_url }}menu_detail/{{menu.pk }}"> {{ menu.name }} </a> - {{ menu.description }}</li>
+{% endfor %}
+</ul>

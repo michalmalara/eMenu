@@ -22,9 +22,9 @@ BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
 SECRET_KEY = 'f$mtrme16$$z5rnn#$stv__o4ugp@=d*%3jclomzh(639%c&nu'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1']
 
 # Application definition
 
@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
 
     'django_filters',
+    'django_celery_beat'
 ]
 
 REST_FRAMEWORK = {
@@ -108,6 +109,14 @@ DATABASES = {
 LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = '/'
 
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = '587'
+EMAIL_HOST_USER = 'michalmalaradjangotest'
+EMAIL_HOST_PASSWORD = r'37HyNwddzXnMXSM'
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False
+
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
 
@@ -147,3 +156,9 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+CELERY_BROKER_URL = 'pyamqp://guest@localhost//'
+CELERY_IMPORTS = ('menu.tasks', )
+CELERYBEAT_SCHEDULE = (
+    'menu.tasks.send_email',
+)

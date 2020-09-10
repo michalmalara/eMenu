@@ -1,5 +1,4 @@
-from django import forms
-from django.contrib.auth.decorators import login_required
+
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponse
 from django.shortcuts import redirect
@@ -9,6 +8,8 @@ from django.template.defaulttags import register
 
 from menu.forms import MenuSearchForm
 from menu.models import Menu, Dish
+
+from .tasks import send_email
 
 
 @register.simple_tag(takes_context=True)
