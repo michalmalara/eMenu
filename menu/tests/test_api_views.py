@@ -30,7 +30,6 @@ class TestMenuViewSet(APITestCase):
         self.test_user1 = User.objects.create_user(username='testuser1', password='abcd')
         self.test_user1.save()
 
-        self.token = Token.objects.get(user_id=self.test_user1.id)
 
 
     def test_public_menu_viewset(self):
@@ -42,15 +41,3 @@ class TestMenuViewSet(APITestCase):
         response = self.client.get('/api/public/menu/')
         self.assertEquals(response.status_code, status.HTTP_200_OK)
         self.assertEquals(response.data['count'], 1)
-
-    def test_menu_viewset(self):
-        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
-
-        response = self.client.get('/api/menu/')
-        self.assertEquals(response.status_code, status.HTTP_200_OK)
-
-    def test_menu_viewset(self):
-        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
-
-        response = self.client.get('/api/dish/')
-        self.assertEquals(response.status_code, status.HTTP_200_OK)
