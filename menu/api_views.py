@@ -17,7 +17,7 @@ def create_auth_token(sender, instance=None, created=False, **kwargs):
 
 class MenuApiView(viewsets.ModelViewSet):
     """
-    Private viewset for reading, creating, updating and deleting objects in Menu table. Only for logged in users.
+    Protected viewset for reading, creating, updating and deleting objects in Menu table. Only for logged in users.
     """
     queryset = Menu.objects.all()
     serializer_class = MenuSerializer
@@ -29,7 +29,7 @@ class MenuApiView(viewsets.ModelViewSet):
 
 class DishApiView(viewsets.ModelViewSet):
     """
-    Private viewset for reading, creating, updating and deleting objects in Dish table. Only for logged in users.
+    Protected viewset for reading, creating, updating and deleting objects in Dish table. Only for logged in users.
     """
     queryset = Dish.objects.all()
     serializer_class = DishSerializer

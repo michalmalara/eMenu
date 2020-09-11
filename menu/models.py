@@ -40,9 +40,12 @@ class Menu(models.Model):
         return super(Menu, self).save(*args, **kwargs)
 
 def dishes_changed(sender, **kwargs):
-        if (kwargs['action']=='post_add') or (kwargs['action']=='post_remove'):
+        if (kwargs['action']=='post_add'):
+            kwargs['instance'].dishes_count = kwargs['instance'].dishes.count()
+
+        if (kwargs['action'] == 'post_remove'):
             queryset = Menu.objects.get(pk=kwargs['instance'].pk)
-            queryset.dishes_count = queryset.dishes.count()
+            queryset.dishes_count= queryset.dishes.count()
             queryset.save()
 
 m2m_changed.connect(dishes_changed, sender=Menu.dishes.through)

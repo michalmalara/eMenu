@@ -55,15 +55,19 @@ class TestViews(TestCase):
         response = self.client.get(url)
         self.assertEquals(response.status_code, 200)
 
-    def test_home_view_user_not_logged_in(self):
-        url = reverse('home')
-        response = self.client.get(url)
-
+    def test_home_view_not_empty_menu_shows(self):
         queryset = Menu.objects.get(pk=30)
         queryset.dishes.add('1')
         queryset.save()
 
+        queryset = Menu.objects.get(pk=15)
+        queryset.dishes.add('1')
+        queryset.save()
+
         queryset = Menu.objects.filter(dishes_count__gt=0)
+
+        url = reverse('home')
+        response = self.client.get(url)
 
         for q in queryset:
             self.assertContains(response, q.name)

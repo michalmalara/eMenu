@@ -1,4 +1,3 @@
-
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponse
 from django.shortcuts import redirect
@@ -122,7 +121,6 @@ class AddDishToMenu(LoginRequiredMixin, ListView):
     def post(self, *args, **kwargs):
         menu_queryset = Menu.objects.get(pk=self.kwargs['pk'])
         menu_queryset.dishes.add(self.request.POST['dish_pk'])
-        menu_queryset.dishes_count = menu_queryset.dishes.count()
         menu_queryset.save()
         return redirect(reverse('add_dish_to_menu', args=[self.kwargs['pk']]))
 

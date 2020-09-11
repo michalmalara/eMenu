@@ -33,5 +33,3 @@ def send_email():
         )
         email.attach_alternative(html_message, "text/html")
         email.send()
-
-    return None

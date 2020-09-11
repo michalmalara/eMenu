@@ -9,10 +9,6 @@ class MenuSerializer(serializers.HyperlinkedModelSerializer):
         fields = '__all__'
         read_only_fields = ['dishes_count']
 
-    def update(self, instance, validated_data):
-        instance.dishes_count = len(validated_data['dishes'])
-        return super().update(instance, validated_data)
-
 
 class DishSerializer(serializers.ModelSerializer):
     class Meta:
