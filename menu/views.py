@@ -1,8 +1,10 @@
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.models import User
 from django.http import HttpResponse
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render
 from django.urls import reverse
-from django.views.generic import ListView, DetailView, CreateView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.template.defaulttags import register
 
 from menu.forms import MenuSearchForm
@@ -102,7 +104,7 @@ class DishDetailView(DetailView):
 
 class MenuCreateView(LoginRequiredMixin, CreateView):
     model = Menu
-    fields = ('name', 'description', 'dishes')
+    fields = ('name', 'description')
     template_name = 'create_menu_view.html'
     success_url = '/'
 
@@ -136,3 +138,29 @@ class AddDishToMenu(LoginRequiredMixin, ListView):
             object_list=objects,
             return_url=return_url,
         )
+
+
+class MenuUpdateView(LoginRequiredMixin, UpdateView):
+    model = Menu
+    template_name = 'edit_menu_view.html'
+    fields = ['name', 'description']
+    success_url = '/'
+
+
+class DishUpdateView(LoginRequiredMixin, UpdateView):
+    model = Dish
+    template_name = 'edit_dish_view.html'
+    fields = ['name', 'description', 'price', 'preparation_time', 'is_vege', 'picture']
+    success_url = '/'
+
+
+class MenuDeleteView(LoginRequiredMixin, DeleteView):
+    model = Menu
+    success_url = '/'
+    template_name = 'menu_delete_confirmation.html'
+
+
+class DishDeleteView(LoginRequiredMixin, DeleteView):
+    model = Dish
+    success_url = '/'
+    template_name = 'dish_delete_confirmation.html'

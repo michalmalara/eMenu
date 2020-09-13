@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block body %}
+
+    <h1>Usuwanie {{ object.name }}</h1>
+    <a href="/">Powrót</a><br/><br/>
+    <p>Czy usunąć danie {{ object.name }}?</p>
+
+    <p>{{ object.description }}</p>
+
+    <form method="POST"> {% csrf_token %}
+        <input type="submit" value="Tak">
+    </form>
+
+{% endblock %}

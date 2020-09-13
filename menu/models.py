@@ -1,6 +1,6 @@
 from django.db import models
 from django.utils import timezone
-from django.db.models.signals import m2m_changed
+from django.db.models.signals import m2m_changed, post_save, pre_save
 
 class Dish(models.Model):
     name = models.CharField(max_length=50, unique=True, verbose_name='Nazwa')
@@ -30,6 +30,7 @@ class Menu(models.Model):
     dishes = models.ManyToManyField(Dish, blank=True, verbose_name='Dania')
     dishes_count = models.IntegerField(default=0, verbose_name='Liczba dań w karcie', editable=False)
 
+
     def __str__(self):
         return f'{self.name}'
 
@@ -48,6 +49,10 @@ def dishes_changed(sender, **kwargs):
             queryset.dishes_count= queryset.dishes.count()
             queryset.save()
 
+
+def dishes_changed_save(sender, **kwargs):
+    kwargs['instance'].dishes_count = kwargs['instance'].dishes.count()
+
+
 m2m_changed.connect(dishes_changed, sender=Menu.dishes.through)
-
-
+post_save.connect(dishes_changed_save, sender=Menu)

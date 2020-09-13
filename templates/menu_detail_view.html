@@ -30,6 +30,7 @@
         {% endfor %}
     </table>
     <br/><br/>
-    <a href="/add_dish_to_menu/{{ object.pk }}">+ Dodaj danie</a>
-
+    <a href="/add_dish_to_menu/{{ object.pk }}">+ Dodaj danie</a><br/>
+    <a href="/edit_menu/{{ object.pk }}">Edytuj</a><br/>
+    <a href="/delete_menu/{{ object.pk }}">Usuń</a>
 {% endblock %}

@@ -2,7 +2,7 @@ from django.test import SimpleTestCase
 from django.urls import resolve, reverse
 
 from menu.views import MenuListView, MenuDetailView, DishDetailView, MenuCreateView, DishCreateView, AddDishToMenu, \
-    DishListView
+    DishListView, MenuUpdateView, DishUpdateView, MenuDeleteView, DishDeleteView
 from django.contrib.auth import views as auth_views
 
 
@@ -51,3 +51,23 @@ class TestUrls(SimpleTestCase):
         url = reverse('add_dish_to_menu', args=[0])
         self.assertEquals(resolve(url).func.__name__, AddDishToMenu.as_view().__name__)
         self.assertTemplateUsed('add_dish_to_menu.html')
+
+    def test_edit_menu_url_is_ok(self):
+        url = reverse('edit_menu', args=[0])
+        self.assertEquals(resolve(url).func.__name__, MenuUpdateView.as_view().__name__)
+        self.assertTemplateUsed('edit_menu_view.html')
+
+    def test_edit_dish_url_is_ok(self):
+        url = reverse('edit_dish', args=[0])
+        self.assertEquals(resolve(url).func.__name__, DishUpdateView.as_view().__name__)
+        self.assertTemplateUsed('edit_dish_view.html')
+
+    def test_delete_menu_url_is_ok(self):
+        url = reverse('delete_menu', args=[0])
+        self.assertEquals(resolve(url).func.__name__, MenuDeleteView.as_view().__name__)
+        self.assertTemplateUsed('menu_delete_confirmation.html')
+
+    def test_delete_dish_url_is_ok(self):
+        url = reverse('delete_dish', args=[0])
+        self.assertEquals(resolve(url).func.__name__, DishDeleteView.as_view().__name__)
+        self.assertTemplateUsed('dish_delete_confirmation.html')

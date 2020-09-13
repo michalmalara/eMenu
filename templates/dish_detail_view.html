@@ -3,7 +3,7 @@
     <a href="/"><= Powrót</a>
 
     <br/><br/>
-    <img src="{{ object.picture.url }}" style="max-width:300px;">
+    <div style="height: 300px;"><img src="{{ object.picture.url }}" style="height: 100%"></div>
     <h1>
         {{ object.name }}
     </h1>
@@ -12,5 +12,8 @@
     </p>
    <p>Cana: {{ object.price }}zł</p>
    <p>Czas przygotowania: {{ object.preparation_time }}min</p>
+
+    <a href="/edit_dish/{{ object.pk }}">Edytuj</a><br/>
+    <a href="/delete_dish/{{ object.pk }}">Usuń</a>
 
 {% endblock %}

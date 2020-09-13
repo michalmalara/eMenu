@@ -50,6 +50,22 @@ class TestViews(TestCase):
         response = self.client.post(url, {'dish_id': '4'})
         self.assertEquals(response.status_code, 403)
 
+        url = reverse('edit_menu', args=['0'])
+        response = self.client.get(url)
+        self.assertEquals(response.status_code, 302)
+
+        url = reverse('edit_dish', args=['0'])
+        response = self.client.get(url)
+        self.assertEquals(response.status_code, 302)
+
+        url = reverse('delete_menu', args=['0'])
+        response = self.client.get(url)
+        self.assertEquals(response.status_code, 302)
+
+        url = reverse('delete_dish', args=['0'])
+        response = self.client.get(url)
+        self.assertEquals(response.status_code, 302)
+
     def test_home_view(self):
         url = reverse('home')
         response = self.client.get(url)

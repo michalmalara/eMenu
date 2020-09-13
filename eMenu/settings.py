@@ -24,7 +24,7 @@ SECRET_KEY = 'f$mtrme16$$z5rnn#$stv__o4ugp@=d*%3jclomzh(639%c&nu'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '0.0.0.0', '[::1]']
 
 # Application definition
 
@@ -170,7 +170,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-CELERY_BROKER_URL = 'pyamqp://guest@localhost//'
+CELERY_BROKER_URL = 'pyamqp://user:password@broker//'
 
 CELERY_IMPORTS = ('menu.tasks', )
 
