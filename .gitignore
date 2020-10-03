@@ -1,8 +1,7 @@
 *.sqlite3
-/cover/
-/htmlcov/
+/cover
+/htmlcov
 .idea
-/venv/
-/htmlcov/
+/venv
 .coverage
 
