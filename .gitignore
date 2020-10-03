@@ -1,3 +1,8 @@
 *.sqlite3
 /cover/
 /htmlcov/
+.idea
+/venv/
+/htmlcov/
+.coverage
+
